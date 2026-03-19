@@ -313,6 +313,7 @@ MonoBehaviour:
     NetworkTopology: 0
     UseCMBService: 0
     AutoSpawnPlayerPrefabClientSide: 1
+    NetworkMessageMetrics: 1
     NetworkProfilingMetrics: 1
     OldPrefabList: []
   RunInBackground: 1
@@ -608,7 +609,6 @@ RectTransform:
   - {fileID: 806970334}
   - {fileID: 1204381815}
   - {fileID: 258899844}
-  - {fileID: 998651605}
   - {fileID: 1768059532}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -851,11 +851,11 @@ Transform:
   m_GameObject: {fileID: 998651602}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -960, y: -539, z: -10}
+  m_LocalPosition: {x: 0, y: 1, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 450785559}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &998651606
 MonoBehaviour:
@@ -1795,4 +1795,5 @@ SceneRoots:
   - {fileID: 1193054658}
   - {fileID: 187461157}
   - {fileID: 1587515492}
+  - {fileID: 998651605}
   - {fileID: 450785559}

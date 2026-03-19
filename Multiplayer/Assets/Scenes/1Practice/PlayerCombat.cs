@@ -1,6 +1,5 @@
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 
 public class PlayerCombat : NetworkBehaviour
 {
@@ -8,6 +7,7 @@ public class PlayerCombat : NetworkBehaviour
     [SerializeField] private int damage = 10;
     private PlayerNetwork _target;
     private ActionMaps _control;
+    [SerializeField] private Rigidbody rb;
 
     
     private void Awake()
@@ -17,15 +17,19 @@ public class PlayerCombat : NetworkBehaviour
         _control.Player.Attack.started += ctx => TryAttack();
 
     }
-    private void OnCollisionEnter(Collision other)
+    private void OnTriggerEnter(Collider other)
     {
-        playerNetwork = other.gameObject.GetComponent<PlayerNetwork>();
+        Debug.Log("Collis");
+        if (!IsServer) return;
+        _target = other.gameObject.GetComponent<PlayerNetwork>();
     }
 
-    private void OnCollisionExit(Collision other)
+    private void OnTriggerExit(Collider other)
     {
-        playerNetwork = null;
+        if (!IsServer) return;
+        _target = null;
     }
+    
 
     public void TryAttack()
     {
@@ -46,15 +50,22 @@ public class PlayerCombat : NetworkBehaviour
         // Сервер проверяет, существует ли цель среди заспавненных сетевых объектов.
         if (!NetworkManager.SpawnManager.SpawnedObjects.TryGetValue(targetObjectId, out NetworkObject targetObject))
             return;
+        
 
-        PlayerNetwork targetPlayer = targetObject.GetComponent<PlayerNetwork>();
         // Запрещаем урон самому себе и удары по некорректной цели.
-        if (targetPlayer == null || targetPlayer == playerNetwork)
+        if (_target == null || _target == playerNetwork)
             return;
 
         // Итоговое значение HP ограничиваем снизу нулем.
-        int nextHp = Mathf.Max(0, targetPlayer.HP.Value - inputDamage);
-        targetPlayer.HP.Value = nextHp;
+        int nextHp = Mathf.Max(0, _target.HP.Value - inputDamage);
+        _target.HP.Value = nextHp;
+
+        // Jump();
+    }
+
+    void Jump()
+    {
+        rb.AddForce(Vector3.up*5);
     }
     
     private void OnDisable()

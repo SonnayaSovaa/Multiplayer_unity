@@ -13,17 +13,19 @@ public class ConnectionUI : MonoBehaviour
     public void StartAsHost()
     {
         SaveNickname();
+        LoadGame();
         // Хост одновременно является сервером и клиентом.
         NetworkManager.Singleton.StartHost();
-        //LoadGame();
+        
     }
 
     public void StartAsClient()
     {
         SaveNickname();
+        LoadGame();
         // Клиент только подключается к уже запущенному хосту/серверу.
         NetworkManager.Singleton.StartClient();
-        LoadGame();
+        
     }
 
     private void SaveNickname()

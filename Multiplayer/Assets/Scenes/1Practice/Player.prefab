@@ -28,8 +28,8 @@ Transform:
   m_GameObject: {fileID: 1765520339847721277}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.10160025, z: -0, w: 0.9948253}
-  m_LocalPosition: {x: 0.219, y: 0.393, z: 0.445}
-  m_LocalScale: {x: 0.25754, y: 0.25754, z: 0.114267915}
+  m_LocalPosition: {x: 0.268, y: 0.393, z: 0.42}
+  m_LocalScale: {x: 0.3212811, y: 0.3212811, z: 0.14254922}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5039710137130865900}
@@ -141,8 +141,8 @@ Transform:
   m_GameObject: {fileID: 4579934732567709928}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0.1016032, z: 0, w: 0.99482507}
-  m_LocalPosition: {x: -0.219, y: 0.393, z: 0.445}
-  m_LocalScale: {x: 0.25754, y: 0.25754, z: 0.114267915}
+  m_LocalPosition: {x: -0.2784, y: 0.393, z: 0.42}
+  m_LocalScale: {x: 0.3212811, y: 0.3212811, z: 0.14254922}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1026300378200037590}
@@ -241,8 +241,8 @@ GameObject:
   - component: {fileID: 700196975771927585}
   - component: {fileID: 8075381277761928884}
   - component: {fileID: 8604077404088773344}
-  - component: {fileID: 1178922130340926576}
-  - component: {fileID: 188650595391769295}
+  - component: {fileID: 5535773660027654542}
+  - component: {fileID: 5725396893157460989}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -446,7 +446,7 @@ MonoBehaviour:
   _playerNetwork: {fileID: 8075381277761928884}
   _nicknameText: {fileID: 566738342464276137}
   _hpText: {fileID: 5275553284650245821}
---- !u!54 &1178922130340926576
+--- !u!54 &5535773660027654542
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -473,7 +473,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &188650595391769295
+--- !u!114 &5725396893157460989
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -482,12 +482,43 @@ MonoBehaviour:
   m_GameObject: {fileID: 5679034824113562214}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 506cd4f3f8e9dd942956ed1719917269, type: 3}
+  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerCombat
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.Components.NetworkTransform
   ShowTopMostFoldoutHeaderGroup: 1
-  playerNetwork: {fileID: 8075381277761928884}
-  damage: 10
+  NetworkTransformExpanded: 0
+  AutoOwnerAuthorityTickOffset: 1
+  PositionInterpolationType: 0
+  RotationInterpolationType: 0
+  ScaleInterpolationType: 0
+  PositionLerpSmoothing: 1
+  PositionMaxInterpolationTime: 0.1
+  RotationLerpSmoothing: 1
+  RotationMaxInterpolationTime: 0.1
+  ScaleLerpSmoothing: 1
+  ScaleMaxInterpolationTime: 0.1
+  AuthorityMode: 0
+  TickSyncChildren: 0
+  UseUnreliableDeltas: 0
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 1
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 1
+  SyncScaleX: 1
+  SyncScaleY: 1
+  SyncScaleZ: 1
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  UseQuaternionSynchronization: 0
+  UseQuaternionCompression: 0
+  UseHalfFloatPrecision: 0
+  InLocalSpace: 0
+  SwitchTransformSpaceWhenParented: 0
+  Interpolate: 1
+  SlerpPosition: 0
 --- !u!1 &7025313871420292166
 GameObject:
   m_ObjectHideFlags: 0
@@ -629,7 +660,7 @@ Transform:
   m_GameObject: {fileID: 8556944514120216442}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.715, y: 0.037, z: 0.78}
+  m_LocalPosition: {x: -0.785, y: 0.037, z: 0.78}
   m_LocalScale: {x: 0.22723, y: 0.16109, z: 3.0009}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -668,7 +699,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: cf9979187db46ae44b71259aedff7309, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -728,6 +759,7 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   playerNetwork: {fileID: 8075381277761928884}
   damage: 10
+  rb: {fileID: 5535773660027654542}
 --- !u!1 &8750825027797708000
 GameObject:
   m_ObjectHideFlags: 0
@@ -943,6 +975,10 @@ PrefabInstance:
     - target: {fileID: 5308228579217708569, guid: 57980d6e5c2da4341a25ff78276a438c, type: 3}
       propertyPath: m_Name
       value: PlayerCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 7069720339016027583, guid: 57980d6e5c2da4341a25ff78276a438c, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
