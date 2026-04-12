@@ -33,7 +33,8 @@ public class PlayerNetwork : NetworkBehaviour
         Nickname.Value = safeValue;
     }
     
-    [SerializeField] private Transform[] _spawnPoints;
+    [SerializeField] private Transform[] spawnPoints;
+    [SerializeField] private GameObject playerBody;
 
     public override void OnNetworkSpawn()
     {
@@ -44,13 +45,12 @@ public class PlayerNetwork : NetworkBehaviour
         }
         
         HP.OnValueChanged += OnHpChanged;
-        IsAlive.OnValueChanged += OnIsAliveChanged;
+        // StartCoroutine(Death());
     }
 
     public override void OnNetworkDespawn()
     {
         HP.OnValueChanged -= OnHpChanged;
-        IsAlive.OnValueChanged -= OnIsAliveChanged;
     }
 
     private void OnHpChanged(int prev, int next)
@@ -66,19 +66,24 @@ public class PlayerNetwork : NetworkBehaviour
 
     private IEnumerator RespawnRoutine()
     {
+        playerBody.SetActive(false);
         yield return new WaitForSeconds(3f);
 
         // Выбрать случайную точку респавна
-        int idx = Random.Range(0, _spawnPoints.Length);
-        transform.position = _spawnPoints[idx].position;
+        // int idx = Random.Range(0, spawnPoints.Length);
+        transform.position = Vector3.zero;
 
         HP.Value = 100;
         IsAlive.Value = true;
+        playerBody.SetActive(true);
     }
 
-    private void OnIsAliveChanged(bool prev, bool next)
+    private IEnumerator Death()
     {
-        // Показываем/скрываем модель на всех клиентах
-        // Студент реализует самостоятельно
+        for (int i = 0; i < 5; i++)
+        {
+            HP.Value -= 20;
+            yield return new WaitForSeconds(1f);
+        }
     }
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PlayerCombat : NetworkBehaviour
 {
-    [SerializeField] private PlayerNetwork playerNetwork;
+    [SerializeField] private PlayerNetwork player;
     [SerializeField] private int damage = 10;
     private PlayerNetwork _target;
     private ActionMaps _control;
@@ -37,7 +37,7 @@ public class PlayerCombat : NetworkBehaviour
         Debug.Log(_target);
 
         // Атаку инициирует только локальный владелец объекта.
-        if (!IsOwner || _target == null)
+        if (!IsOwner || _target == null || !player.IsAlive.Value)
             return;
         DealDamageServerRpc(_target.NetworkObjectId, damage);
     }
@@ -53,7 +53,7 @@ public class PlayerCombat : NetworkBehaviour
         
 
         // Запрещаем урон самому себе и удары по некорректной цели.
-        if (_target == null || _target == playerNetwork)
+        if (_target == null || _target == player)
             return;
 
         // Итоговое значение HP ограничиваем снизу нулем.
@@ -63,11 +63,6 @@ public class PlayerCombat : NetworkBehaviour
         // Jump();
     }
 
-    void Jump()
-    {
-        rb.AddForce(Vector3.up*5);
-    }
-    
     private void OnDisable()
     {
         _control.Disable();

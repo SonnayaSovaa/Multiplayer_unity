@@ -3,28 +3,35 @@ using UnityEngine;
 using System.Collections;
 
 // PickupManager — обычный MonoBehaviour, работает только на сервере
-public class PickupManager : MonoBehaviour
+public class PickupManager : NetworkBehaviour
 {
     [SerializeField] private GameObject _healthPickupPrefab;
     [SerializeField] private Transform[] _spawnPoints;
     [SerializeField] private float _respawnDelay = 10f;
 
-    private void Start()
+    public override void OnNetworkSpawn()
     {
-        // Менеджер активен только на сервере/хосте
-        if (!NetworkManager.Singleton.IsServer) return;
-        SpawnAll();
+        Debug.Log(IsServer);
+        // Спавним объекты только если мы сервер
+        if (IsServer)
+        {
+            SpawnAll();
+        }
     }
 
     private void SpawnAll()
     {
-        Debug.Log("SPAWN HEAL");
         foreach (var point in _spawnPoints)
+        {
             SpawnPickup(point.position);
+        }
     }
 
     public void OnPickedUp(Vector3 position)
     {
+        if (!IsServer) return;
+        
+        // Запускаем респавн на сервере
         StartCoroutine(RespawnAfterDelay(position));
     }
 
