@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Practice1.2/Practice1.2.unity
+    path: Assets/Scenes/Practice3/Practice3.unity
     guid: 210eb404aacd1da4b95a90ffbfc25cfa
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
