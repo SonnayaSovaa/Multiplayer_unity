@@ -1217,7 +1217,7 @@ MonoBehaviour:
   collider: {fileID: 1255131155876576830}
   body: {fileID: 3516351731220780617}
   spawnDelay: 3
-  playerView: {fileID: 0}
+  playerView: {fileID: 8086840516316019478}
 --- !u!136 &1255131155876576830
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1277,12 +1277,12 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584242196974620394
+  _initializedTimestamp: -8584242033737448921
   _localLevelOfDetailCalculationType: 0
   _useLevelOfDetail: 0
   _useRootLevelOfDetail: 1
   NetworkObserver: {fileID: 0}
-  _enablePrediction: 0
+  _enablePrediction: 1
   _predictionType: 0
   _localReconcileCorrectionType: 2
   _graphicalObject: {fileID: 0}
@@ -1363,7 +1363,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c71fd7f855ec523429999fc4e14a1928, type: 3}
   m_Name: 
   m_EditorClassIdentifier: FishNet.Runtime::FishNet.Observing.NetworkObserver
-  _overrideType: 3
+  _overrideType: 2
   _updateHostVisibility: 1
   _observerConditions:
   - {fileID: 11400000, guid: 2033f54fd2794464bae08fa5a55c8996, type: 2}
