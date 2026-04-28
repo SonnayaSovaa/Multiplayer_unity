@@ -1,4 +1,5 @@
-using Unity.Netcode;
+using FishNet.Object;
+using FishNet.Object.Synchronizing;
 using UnityEngine;
 using System.Collections;
 
@@ -9,7 +10,7 @@ public class PickupManager : NetworkBehaviour
     [SerializeField] private Transform[] _spawnPoints;
     [SerializeField] private float _respawnDelay = 10f;
 
-    public override void OnNetworkSpawn()
+    public override void OnStartNetwork()
     {
         Debug.Log(IsServer);
         // Спавним объекты только если мы сервер
@@ -45,6 +46,6 @@ public class PickupManager : NetworkBehaviour
     {
         var go = Instantiate(_healthPickupPrefab, position, Quaternion.identity);
         go.GetComponent<HealthPickup>().Init(this);
-        go.GetComponent<NetworkObject>().Spawn();
+        ServerManager.Spawn(go);
     }
 }

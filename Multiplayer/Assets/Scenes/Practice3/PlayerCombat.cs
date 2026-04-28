@@ -1,4 +1,5 @@
-using Unity.Netcode;
+using FishNet.Object;
+using FishNet.Object.Synchronizing;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -36,19 +37,16 @@ public class PlayerCombat : NetworkBehaviour
         // Атаку инициирует только локальный владелец объекта.
         if (!IsOwner || _target == null || !player.IsAlive.Value)
             return;
-        DealDamageServerRpc(_target.NetworkObjectId, damage);
+        DealDamage(_target.ObjectId, damage);
     }
 
     [ServerRpc]
-    private void DealDamageServerRpc(ulong targetObjectId, int inputDamage)
+    private void DealDamage(int targetObjectId, int inputDamage)
     {
         Debug.Log(targetObjectId);
         
         // Сервер проверяет, существует ли цель среди заспавненных сетевых объектов.
-        if (!NetworkManager.SpawnManager.SpawnedObjects.TryGetValue(targetObjectId, out NetworkObject targetObject))
-            return;
         
-
         // Запрещаем урон самому себе и удары по некорректной цели.
         if (_target == null || _target == player)
             return;

@@ -1,5 +1,6 @@
 using TMPro;
-using Unity.Netcode;
+using FishNet.Object;
+using FishNet.Object.Synchronizing;
 using UnityEngine;
 using Unity.Collections;
 
@@ -9,27 +10,18 @@ public class PlayerView : NetworkBehaviour
     [SerializeField] private TMP_Text _nicknameText;
     [SerializeField] private TMP_Text _hpText;
 
-    public override void OnNetworkSpawn()
+    public override void OnStartNetwork()
     {
         // Подписываемся на изменения только после сетевого спавна объекта.
-        _playerNetwork.Nickname.OnValueChanged += OnNicknameChanged;
-        _playerNetwork.HP.OnValueChanged += OnHpChanged;
 
         // Сразу рисуем текущее состояние, чтобы UI не ждал первого сетевого события.
-        OnNicknameChanged(default, _playerNetwork.Nickname.Value);
+        OnNicknameChanged(_playerNetwork.Nickname.Value);
         OnHpChanged(0, _playerNetwork.HP.Value);
     }
 
-    public override void OnNetworkDespawn()
+    public void OnNicknameChanged(string newValue)
     {
-        // Отписка обязательна, чтобы не оставлять "висячие" обработчики.
-        _playerNetwork.Nickname.OnValueChanged -= OnNicknameChanged;
-        _playerNetwork.HP.OnValueChanged -= OnHpChanged;
-    }
-
-    private void OnNicknameChanged(FixedString32Bytes oldValue, FixedString32Bytes newValue)
-    {
-        _nicknameText.text = newValue.ToString();
+        _nicknameText.text = newValue;
     }
 
     private void OnHpChanged(int oldValue, int newValue)

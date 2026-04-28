@@ -1,4 +1,5 @@
-using Unity.Netcode;
+using FishNet.Object;
+using FishNet.Object.Synchronizing;
 using UnityEngine;
 
 public class Projectile : NetworkBehaviour
@@ -19,7 +20,7 @@ public class Projectile : NetworkBehaviour
 
         if (target != null)
         {
-            if (target.OwnerClientId == OwnerClientId) return;
+            if (target.Owner == Owner) return;
 
             _hasHit = true; 
 
@@ -27,7 +28,7 @@ public class Projectile : NetworkBehaviour
 
             if (NetworkObject.IsSpawned)
             {
-                NetworkObject.Despawn(true);
+                ServerManager.Despawn(gameObject);
             }
         }
     }

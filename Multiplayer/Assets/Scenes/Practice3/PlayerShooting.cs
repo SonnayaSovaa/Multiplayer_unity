@@ -1,11 +1,12 @@
-using Unity.Netcode;
+using FishNet.Object;
+using FishNet.Object.Synchronizing;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerShooting : NetworkBehaviour
 {
-    public NetworkVariable<int> Ammo = new(30, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-
+    public readonly SyncVar<int> Ammo;
+    
     [SerializeField] private int _maxAmmo = 30;
     [SerializeField] private GameObject _projectilePrefab;
     [SerializeField] private Transform _firePoint;
@@ -14,10 +15,10 @@ public class PlayerShooting : NetworkBehaviour
     private float _lastShotTime;
     private PlayerNetwork _playerNetwork;
 
-    public override void OnNetworkSpawn()
+    public override void OnStartNetwork()
     {
         _playerNetwork = GetComponent<PlayerNetwork>();
-        if (IsServer) Ammo.Value = _maxAmmo; 
+        if (IsServerInitialized) Ammo.Value = _maxAmmo; 
     }
 
     private void Update()
@@ -28,12 +29,12 @@ public class PlayerShooting : NetworkBehaviour
 
         if (isShooting && Ammo.Value > 0)
         {
-            ShootServerRpc(_firePoint.position, transform.forward);
+            Shoot(_firePoint.position, transform.forward);
         }
     }
 
     [ServerRpc]
-    private void ShootServerRpc(Vector3 pos, Vector3 dir, ServerRpcParams rpc = default)
+    private void Shoot(Vector3 pos, Vector3 dir)
     {
         if (!_playerNetwork.IsAlive.Value || Ammo.Value <= 0 || Time.time < _lastShotTime + _cooldown) return;
 
@@ -42,6 +43,7 @@ public class PlayerShooting : NetworkBehaviour
 
         GameObject go = Instantiate(_projectilePrefab, pos, Quaternion.LookRotation(dir));
         var no = go.GetComponent<NetworkObject>();
-        no.SpawnWithOwnership(rpc.Receive.SenderClientId);
+        ServerManager.Spawn(go);
+        
     }
 }

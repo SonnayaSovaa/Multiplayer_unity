@@ -1,41 +1,50 @@
 using Unity.Collections;
-using Unity.Netcode;
+using FishNet.Object;
+using FishNet.Object.Synchronizing;
 using UnityEngine;
 using System.Collections;
 
 public class PlayerNetwork : NetworkBehaviour
 {
-    public NetworkVariable<FixedString32Bytes> Nickname = new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-    public NetworkVariable<int> HP = new(100, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-    public NetworkVariable<bool> IsAlive = new(true, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
+    public readonly SyncVar<int> HP;
+    public readonly SyncVar<string> Nickname;
+    public readonly SyncVar<bool> IsAlive;
+    
+    
     [SerializeField] private CharacterController cc;
     [SerializeField] private CapsuleCollider collider;
     [SerializeField] private GameObject body;
     [SerializeField] private float spawnDelay = 3f;
+    [SerializeField] private PlayerView playerView;
 
     private PlayerSpawnPoint[] points;
-    public override void OnNetworkSpawn()
+
+    public override void OnStartNetwork()
     {
+        HP.OnChange += OnHpChanged;
+        Nickname.OnChange += OnNicknameChanged;
+        IsAlive.OnChange += OnIsAliveChanged;
+
         points = FindObjectsByType<PlayerSpawnPoint>(FindObjectsSortMode.None);
-        if (IsOwner)
-        {
-            SubmitNicknameServerRpc(ConnectionUI.PlayerNickname);
-            transform.position = points[Random.Range(0, points.Length)].transform.position;
 
-        }
-        
-        HP.OnValueChanged += OnHpChanged;
-        IsAlive.OnValueChanged += OnIsAliveChanged;
+        transform.position = points[Random.Range(0, points.Length)].transform.position;
 
-        OnIsAliveChanged(true, IsAlive.Value);
+        OnIsAliveChanged(true, IsAlive.Value, IsServerInitialized);
     }
 
-    public override void OnNetworkDespawn()
+    private void OnNicknameChanged(string prev, string next, bool asServer)
     {
-        HP.OnValueChanged -= OnHpChanged;
-        IsAlive.OnValueChanged -= OnIsAliveChanged;
+        playerView.OnNicknameChanged(next);
     }
+    
+    public override void OnStopNetwork()
+    {
+        HP.OnChange -= OnHpChanged;
+        IsAlive.OnChange -= OnIsAliveChanged;
+        Nickname.OnChange -= OnNicknameChanged;
+    }
+    
     
     IEnumerator RespawnCool(float delay)
     {
@@ -49,15 +58,9 @@ public class PlayerNetwork : NetworkBehaviour
         IsAlive.Value = true;
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    private void SubmitNicknameServerRpc(string nickname)
+    private void OnHpChanged(int prev, int next, bool asServer)
     {
-        Nickname.Value = string.IsNullOrWhiteSpace(nickname) ? $"Player_{OwnerClientId}" : nickname.Trim();
-    }
-
-    private void OnHpChanged(int prev, int next)
-    {
-        if (!IsServer) return;
+        if (!IsServerInitialized) return;
         if (next <= 0 && IsAlive.Value)
         {
             IsAlive.Value = false;
@@ -65,7 +68,7 @@ public class PlayerNetwork : NetworkBehaviour
     }
     
 
-    private void OnIsAliveChanged(bool prev, bool isAlive)
+    private void OnIsAliveChanged(bool prev, bool next, bool asServer)
     {
         if (IsOwner && !IsAlive.Value)
         {
