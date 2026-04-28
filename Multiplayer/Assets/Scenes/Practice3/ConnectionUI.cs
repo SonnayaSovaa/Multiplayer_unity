@@ -1,3 +1,5 @@
+using FishNet.Component.Spawning;
+using FishNet.Connection;
 using FishNet.Managing;
 using TMPro;
 using FishNet.Object;
@@ -9,6 +11,7 @@ public class ConnectionUI : MonoBehaviour
     [SerializeField] private TMP_InputField _nicknameInput;
     [SerializeField] private GameObject menuCanvas;
     [SerializeField] NetworkManager networkManager;
+    [SerializeField] private NetworkObject playerPrefab;
 
     // Сохраняем ник локально до появления сетевого объекта игрока.
     public static string PlayerNickname { get; private set; } = "Player";
@@ -19,19 +22,21 @@ public class ConnectionUI : MonoBehaviour
         LoadGame();
         // Хост одновременно является сервером и клиентом.
         networkManager.ServerManager.StartConnection();
+        networkManager.ClientManager.StartConnection();
+
         
     }
 
     public void StartAsClient()
     {
-        if (networkManager.ServerManager.StartConnection())
-        {
-            SaveNickname();
-            LoadGame();
-            // Клиент только подключается к уже запущенному хосту/серверу.
-            networkManager.ClientManager.StartConnection();
-        }
-        
+
+        SaveNickname();
+        LoadGame();
+
+        // Клиент только подключается к уже запущенному хосту/серверу.
+        networkManager.ClientManager.StartConnection();
+
+
     }
 
     private void SaveNickname()
@@ -46,4 +51,5 @@ public class ConnectionUI : MonoBehaviour
     {
         menuCanvas.SetActive(false);
     }
+    
 }

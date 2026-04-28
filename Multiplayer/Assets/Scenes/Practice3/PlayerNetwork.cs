@@ -7,9 +7,9 @@ using System.Collections;
 public class PlayerNetwork : NetworkBehaviour
 {
 
-    public readonly SyncVar<int> HP;
-    public readonly SyncVar<string> Nickname;
-    public readonly SyncVar<bool> IsAlive;
+    public readonly SyncVar<int> HP = new SyncVar<int>();
+    public readonly SyncVar<string> Nickname = new SyncVar<string>();
+    public readonly SyncVar<bool> IsAlive = new SyncVar<bool>();
     
     
     [SerializeField] private CharacterController cc;

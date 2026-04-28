@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerShooting : NetworkBehaviour
 {
-    public readonly SyncVar<int> Ammo;
+    public readonly SyncVar<int> Ammo = new SyncVar<int>();
     
     [SerializeField] private int _maxAmmo = 30;
     [SerializeField] private GameObject _projectilePrefab;

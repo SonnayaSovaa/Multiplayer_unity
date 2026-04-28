@@ -12,9 +12,9 @@ public class PickupManager : NetworkBehaviour
 
     public override void OnStartNetwork()
     {
-        Debug.Log(IsServer);
+        Debug.Log(IsServerInitialized);
         // Спавним объекты только если мы сервер
-        if (IsServer)
+        if (IsServerInitialized)
         {
             SpawnAll();
         }
@@ -30,7 +30,7 @@ public class PickupManager : NetworkBehaviour
 
     public void OnPickedUp(Vector3 position)
     {
-        if (!IsServer) return;
+        if (!IsServerInitialized) return;
         
         // Запускаем респавн на сервере
         StartCoroutine(RespawnAfterDelay(position));
