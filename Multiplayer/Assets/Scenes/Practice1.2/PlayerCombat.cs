@@ -1,35 +1,32 @@
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.InputSystem;
+
 
 public class PlayerCombat : NetworkBehaviour
 {
     [SerializeField] private PlayerNetwork player;
     [SerializeField] private int damage = 10;
     private PlayerNetwork _target;
-    private ActionMaps _control;
-    [SerializeField] private Rigidbody rb;
-
     
-    private void Awake()
-    {
-        _control = new ActionMaps();
-        _control.Enable();
-        _control.Player.Attack.started += ctx => TryAttack();
-
-    }
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log("Collis");
-        if (!IsServer) return;
+        
         _target = other.gameObject.GetComponent<PlayerNetwork>();
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (!IsServer) return;
+        
         _target = null;
     }
-    
+
+    void Update()
+    {
+        if (Mouse.current != null && Mouse.current.middleButton.wasPressedThisFrame)
+            TryAttack();
+    }
 
     public void TryAttack()
     {
@@ -63,8 +60,4 @@ public class PlayerCombat : NetworkBehaviour
         // Jump();
     }
 
-    private void OnDisable()
-    {
-        _control.Disable();
-    }
 }

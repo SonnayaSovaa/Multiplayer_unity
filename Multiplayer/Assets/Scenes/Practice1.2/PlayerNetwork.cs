@@ -1,89 +1,80 @@
 using Unity.Collections;
-using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
+using System.Collections;
 
 public class PlayerNetwork : NetworkBehaviour
 {
-    // Ник должен быть виден всем клиентам, но менять его может только сервер.
-    public NetworkVariable<FixedString32Bytes> Nickname = new(
-        default,
-        NetworkVariableReadPermission.Everyone,
-        NetworkVariableWritePermission.Server
-    );
+    public NetworkVariable<FixedString32Bytes> Nickname = new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    public NetworkVariable<int> HP = new(100, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    public NetworkVariable<bool> IsAlive = new(true, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
-    // HP тоже читает каждый клиент, но изменяется только на сервере.
-    public NetworkVariable<int> HP = new(
-        100,
-        NetworkVariableReadPermission.Everyone,
-        NetworkVariableWritePermission.Server
-    );
+    [SerializeField] private CharacterController cc;
+    [SerializeField] private CapsuleCollider collider;
+    [SerializeField] private GameObject body;
+    [SerializeField] private float spawnDelay = 3f;
 
-    public NetworkVariable<bool> IsAlive = new(
-        true,
-        NetworkVariableReadPermission.Everyone,
-        NetworkVariableWritePermission.Server
-    );
-
-    [ServerRpc(RequireOwnership = false)]
-    private void SubmitNicknameServerRpc(string nickname)
-    {
-        // Сервер нормализует ник и записывает итоговое значение в NetworkVariable.
-        string safeValue = string.IsNullOrWhiteSpace(nickname) ? $"Player_{OwnerClientId}" : nickname.Trim();
-        Nickname.Value = safeValue;
-    }
-    
-    [SerializeField] private Transform[] spawnPoints;
-    [SerializeField] private GameObject playerBody;
-
+    private PlayerSpawnPoint[] points;
     public override void OnNetworkSpawn()
     {
+        points = FindObjectsByType<PlayerSpawnPoint>(FindObjectsSortMode.None);
         if (IsOwner)
         {
-            // Только владелец отправляет на сервер свой локально введенный ник.
             SubmitNicknameServerRpc(ConnectionUI.PlayerNickname);
+            transform.position = points[Random.Range(0, points.Length)].transform.position;
+
         }
         
         HP.OnValueChanged += OnHpChanged;
-        // StartCoroutine(Death());
+        IsAlive.OnValueChanged += OnIsAliveChanged;
+
+        OnIsAliveChanged(true, IsAlive.Value);
     }
 
     public override void OnNetworkDespawn()
     {
         HP.OnValueChanged -= OnHpChanged;
+        IsAlive.OnValueChanged -= OnIsAliveChanged;
+    }
+    
+    IEnumerator RespawnCool(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        
+        collider.enabled = true;
+        body.SetActive(true);
+        cc.enabled = true;
+        HP.Value = 100;
+        GetComponent<PlayerShooting>().Ammo.Value = 30;
+        IsAlive.Value = true;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void SubmitNicknameServerRpc(string nickname)
+    {
+        Nickname.Value = string.IsNullOrWhiteSpace(nickname) ? $"Player_{OwnerClientId}" : nickname.Trim();
     }
 
     private void OnHpChanged(int prev, int next)
     {
-        // Только сервер запускает цикл смерти
         if (!IsServer) return;
         if (next <= 0 && IsAlive.Value)
         {
             IsAlive.Value = false;
-            StartCoroutine(RespawnRoutine());
         }
     }
+    
 
-    private IEnumerator RespawnRoutine()
+    private void OnIsAliveChanged(bool prev, bool isAlive)
     {
-        playerBody.SetActive(false);
-        yield return new WaitForSeconds(3f);
-
-        // Выбрать случайную точку респавна
-        // int idx = Random.Range(0, spawnPoints.Length);
-        transform.position = Vector3.zero;
-
-        HP.Value = 100;
-        IsAlive.Value = true;
-        playerBody.SetActive(true);
-    }
-
-    private IEnumerator Death()
-    {
-        for (int i = 0; i < 5; i++)
+        if (IsOwner && !IsAlive.Value)
         {
-            HP.Value -= 20;
-            yield return new WaitForSeconds(1f);
+            
+            body.SetActive(false);
+            collider.enabled = false;
+            transform.position = points[Random.Range(0, points.Length)].transform.position;
+            cc.enabled = false;
+            StartCoroutine(RespawnCool(spawnDelay));
         }
     }
 }

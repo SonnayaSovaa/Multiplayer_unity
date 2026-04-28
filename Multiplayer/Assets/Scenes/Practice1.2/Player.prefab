@@ -1056,9 +1056,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCombat
   ShowTopMostFoldoutHeaderGroup: 1
-  player: {fileID: 0}
+  player: {fileID: 3704549336983541623}
   damage: 10
-  rb: {fileID: 0}
 --- !u!1 &7713961259339762576
 GameObject:
   m_ObjectHideFlags: 0
@@ -1093,7 +1092,7 @@ Transform:
   m_GameObject: {fileID: 7713961259339762576}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.421, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1119,7 +1118,7 @@ MonoBehaviour:
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
+  SceneMigrationSynchronization: 0
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
@@ -1177,7 +1176,7 @@ MonoBehaviour:
   SyncScaleX: 1
   SyncScaleY: 1
   SyncScaleZ: 1
-  PositionThreshold: 0.001
+  PositionThreshold: 0
   RotAngleThreshold: 0.01
   ScaleThreshold: 0.01
   UseQuaternionSynchronization: 0
@@ -1186,7 +1185,7 @@ MonoBehaviour:
   InLocalSpace: 0
   SwitchTransformSpaceWhenParented: 0
   Interpolate: 1
-  SlerpPosition: 0
+  SlerpPosition: 1
 --- !u!114 &7999574569076894802
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1200,10 +1199,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerShooting
   ShowTopMostFoldoutHeaderGroup: 1
-  projectilePrefab: {fileID: 2459658181292589610, guid: c9399d33c10e200468c3cf33906f6e46, type: 3}
-  firePoint: {fileID: 7830523408018221169}
-  cooldown: 0.4
-  maxAmmo: 10
+  Ammo:
+    UpdateTraits:
+      MinSecondsBetweenUpdates: 0
+      MaxSecondsBetweenUpdates: 0
+    m_InternalValue: 30
+  _maxAmmo: 30
+  _projectilePrefab: {fileID: 2459658181292589610, guid: c9399d33c10e200468c3cf33906f6e46, type: 3}
+  _firePoint: {fileID: 7830523408018221169}
+  _cooldown: 0.5
 --- !u!114 &1906416651554802719
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1320,8 +1324,10 @@ MonoBehaviour:
       MinSecondsBetweenUpdates: 0
       MaxSecondsBetweenUpdates: 0
     m_InternalValue: 1
-  spawnPoints: []
-  playerBody: {fileID: 3516351731220780617}
+  cc: {fileID: 4832246127854342991}
+  collider: {fileID: 1255131155876576830}
+  body: {fileID: 3516351731220780617}
+  spawnDelay: 3
 --- !u!136 &1255131155876576830
 CapsuleCollider:
   m_ObjectHideFlags: 0

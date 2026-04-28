@@ -1,10 +1,11 @@
 using Unity.Netcode;
 using UnityEngine;
+
 public class Projectile : NetworkBehaviour
 {
-    [SerializeField] private float _speed = 18f;
-    [SerializeField] private int _damage = 20;
-
+    [SerializeField] private float _speed = 15f;
+    [SerializeField] private int _damage = 25;
+    private bool _hasHit = false;
     private void Update()
     {
         transform.Translate(Vector3.forward * _speed * Time.deltaTime);
@@ -12,17 +13,22 @@ public class Projectile : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!IsServer) return;
+        if (!IsServer || _hasHit) return; 
 
         var target = other.GetComponent<PlayerNetwork>();
-        if (target == null) return;
 
-        // Не наносим урон самому себе
-        if (target.OwnerClientId == OwnerClientId) return;
+        if (target != null)
+        {
+            if (target.OwnerClientId == OwnerClientId) return;
 
-        int newHp = Mathf.Max(0, target.HP.Value - _damage);
-        target.HP.Value = newHp;
+            _hasHit = true; 
 
-        NetworkObject.Despawn(destroy: true);
+            target.HP.Value = Mathf.Max(0, target.HP.Value - _damage);
+
+            if (NetworkObject.IsSpawned)
+            {
+                NetworkObject.Despawn(true);
+            }
+        }
     }
 }
