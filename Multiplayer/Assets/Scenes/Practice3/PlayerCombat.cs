@@ -12,50 +12,30 @@ public class PlayerCombat : NetworkBehaviour
     
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Collis");
+        if (!IsServerInitialized)
+            return;
+
+        if (!IsSpawned)
+            return;
+
+        _target = other.GetComponent<PlayerNetwork>();
+        Debug.Log(_target.name);
         
-        _target = other.gameObject.GetComponent<PlayerNetwork>();
+
+        if (_target ==null)
+            return;
+        // Не стреляем в самого себя
+        if (_target.Owner.ClientId == Owner.ClientId)
+            return;
+        
+        _target.TakeDamage(damage);
     }
 
     private void OnTriggerExit(Collider other)
     {
-        
         _target = null;
     }
 
-    void Update()
-    {
-        if (Mouse.current != null && Mouse.current.middleButton.wasPressedThisFrame)
-            TryAttack();
-    }
-
-    public void TryAttack()
-    {
-        
-        Debug.Log(_target);
-
-        // Атаку инициирует только локальный владелец объекта.
-        if (!IsOwner || _target == null || !player.IsAlive.Value)
-            return;
-        DealDamage(_target.ObjectId, damage);
-    }
-
-    [ServerRpc]
-    private void DealDamage(int targetObjectId, int inputDamage)
-    {
-        Debug.Log(targetObjectId);
-        
-        // Сервер проверяет, существует ли цель среди заспавненных сетевых объектов.
-        
-        // Запрещаем урон самому себе и удары по некорректной цели.
-        if (_target == null || _target == player)
-            return;
-
-        // Итоговое значение HP ограничиваем снизу нулем.
-        int nextHp = Mathf.Max(0, _target.HP.Value - inputDamage);
-        _target.HP.Value = nextHp;
-
-        // Jump();
-    }
+    
 
 }

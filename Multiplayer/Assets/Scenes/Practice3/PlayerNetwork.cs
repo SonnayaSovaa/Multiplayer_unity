@@ -1,85 +1,179 @@
-using Unity.Collections;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
-using UnityEngine;
-using System.Collections;
+using FishNet.Component.Transforming;
 
+[RequireComponent(typeof(CharacterController))]
 public class PlayerNetwork : NetworkBehaviour
 {
+    [Header("Player Components")]
+    [SerializeField] private CharacterController characterController;
+    [SerializeField] private GameObject characterModel;
 
-    public readonly SyncVar<int> HP = new SyncVar<int>(100);
-    public readonly SyncVar<string> Nickname = new SyncVar<string>();
+    [Header("Respawn Settings")]
+    [SerializeField] private float respawnDelay = 5f;
+
+    // Сетевые переменные
     public readonly SyncVar<bool> IsAlive = new SyncVar<bool>(true);
-    
-    
-    [SerializeField] private CharacterController cc;
-    [SerializeField] private CapsuleCollider collider;
-    [SerializeField] private GameObject body;
-    [SerializeField] private float spawnDelay = 3f;
-    [SerializeField] private PlayerView playerView;
+    public readonly SyncVar<int> HP = new SyncVar<int>(100);
+    public readonly SyncVar<string> Nickname = new SyncVar<string>("Player");
 
-    private PlayerSpawnPoint[] points;
+    private bool _isRespawning;
+    private PlayerMovement _movement;
 
-    public override void OnStartNetwork()
+    private void Awake()
     {
-        HP.OnChange += OnHpChanged;
-        Nickname.OnChange += OnNicknameChanged;
-        IsAlive.OnChange += OnIsAliveChanged;
-
-        Nickname.Value = FindObjectOfType<ConnectionUI>().PlayerNickname;
-
-        points = FindObjectsByType<PlayerSpawnPoint>(FindObjectsSortMode.None);
-
-        transform.position = points[Random.Range(0, points.Length)].transform.position;
-
-        OnIsAliveChanged(true, IsAlive.Value, IsServerInitialized);
+        if (characterController == null)
+            characterController = GetComponent<CharacterController>();
+        _movement = GetComponent<PlayerMovement>();
     }
+        public override void OnStartClient()
+    {
+        base.OnStartClient();
 
-    private void OnNicknameChanged(string prev, string next, bool asServer)
-    {
-        playerView.OnNicknameChanged(next);
+        if (IsOwner)
+            SubmitNicknameServerRpc(ConnectionUI.PlayerNickname);
     }
-    
-    public override void OnStopNetwork()
-    {
-        HP.OnChange -= OnHpChanged;
-        IsAlive.OnChange -= OnIsAliveChanged;
-        Nickname.OnChange -= OnNicknameChanged;
-    }
-    
-    
-    IEnumerator RespawnCool(float delay)
-    {
-        yield return new WaitForSeconds(delay);
         
-        collider.enabled = true;
-        body.SetActive(true);
-        cc.enabled = true;
-        HP.Value = 100;
-        GetComponent<PlayerShooting>().Ammo.Value = 30;
-        IsAlive.Value = true;
+    [ServerRpc(RequireOwnership = false)]
+    public void SubmitNicknameServerRpc(string nickname)
+    {
+        int id = Owner != null ? Owner.ClientId : -1;
+
+        Nickname.Value = string.IsNullOrWhiteSpace(nickname)
+            ? $"Player_{id}"
+            : nickname.Trim();
     }
 
-    private void OnHpChanged(int prev, int next, bool asServer)
+    public override void OnStartServer()
     {
-        if (!IsServerInitialized) return;
-        if (next <= 0 && IsAlive.Value)
-        {
-            IsAlive.Value = false;
-        }
+        base.OnStartServer();
+
+        IsAlive.Value = true;
+        HP.Value = 100;
     }
     
-
-    private void OnIsAliveChanged(bool prev, bool next, bool asServer)
+    [Server]
+    public void TakeDamage(int damage)
     {
-        if (IsOwner && !IsAlive.Value)
+        if (!IsAlive.Value)
+            return;
+
+        HP.Value -= damage;
+
+        if (HP.Value <= 0)
         {
-            
-            body.SetActive(false);
-            collider.enabled = false;
-            transform.position = points[Random.Range(0, points.Length)].transform.position;
-            cc.enabled = false;
-            StartCoroutine(RespawnCool(spawnDelay));
+            HP.Value = 0;
+            Die();
         }
+    }
+
+    [Server]
+    private void Die()
+    {
+        if (_isRespawning)
+            return;
+
+        IsAlive.Value = false;
+        _isRespawning = true;
+
+        RpcHandleDeath();
+
+        StartCoroutine(RespawnCoroutine());
+    }
+
+    [ObserversRpc]
+    private void RpcHandleDeath()
+    {
+
+        characterController.enabled = false;
+        characterModel.SetActive(false);
+    }
+
+    [Server]
+    private IEnumerator RespawnCoroutine()
+    {
+        float timer = respawnDelay;
+
+        while (timer > 0f)
+        {
+            RpcRespawnCountdown(Mathf.CeilToInt(timer));
+            yield return new WaitForSeconds(1f);
+            timer -= 1f;
+        }
+
+        RespawnPlayer();
+    }
+
+    [ObserversRpc]
+    private void RpcRespawnCountdown(int secondsLeft)
+    {
+        Debug.Log($"Respawn через {secondsLeft}...");
+    }
+
+   [Server]
+private void RespawnPlayer()
+{
+    Transform spawnPoint = GetRandomRespawnPoint();
+    if (spawnPoint == null)
+        return;
+
+    CharacterController cc = characterController;
+
+    if (cc != null)
+        cc.enabled = false;
+
+    transform.SetPositionAndRotation(
+        spawnPoint.position,
+        spawnPoint.rotation
+    );
+
+    HP.Value = 100;
+    IsAlive.Value = true;
+
+    RpcHandleRespawn(
+        spawnPoint.position,
+        spawnPoint.rotation
+    );
+
+    _isRespawning = false;
+}
+[ObserversRpc]
+private void RpcHandleRespawn(Vector3 position, Quaternion rotation)
+{
+    if (characterController != null)
+        characterController.enabled = false;
+
+    transform.SetPositionAndRotation(position, rotation);
+
+
+    if (characterModel != null)
+        characterModel.SetActive(true);
+
+    if (characterController != null)
+        characterController.enabled = true;
+}
+
+    [Server]
+    private Transform GetRandomRespawnPoint()
+    {
+        PlayerSpawnPoint [] points = FindObjectsByType<PlayerSpawnPoint>(FindObjectsSortMode.None);
+
+        if (points == null || points.Length == 0)
+        {
+            Debug.LogWarning("Точки респавна не найдены!");
+            return null;
+        }
+
+        int index = Random.Range(0, points.Length);
+        return points[index].transform;
+    }
+    
+    [ServerRpc]
+    public void SetNickname(string newNickname)
+    {
+        Nickname.Value = newNickname;
     }
 }

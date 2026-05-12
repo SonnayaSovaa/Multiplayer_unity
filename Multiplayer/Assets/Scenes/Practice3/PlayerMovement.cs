@@ -1,5 +1,4 @@
 using FishNet.Object;
-using FishNet.Object.Synchronizing;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
@@ -36,6 +35,7 @@ public class PlayerMovement : NetworkBehaviour
     {
         OnMovement();
     }
+    
 
     private void OnMovement()
     {

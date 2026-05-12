@@ -1,28 +1,48 @@
 using TMPro;
-using FishNet.Object;
-using FishNet.Object.Synchronizing;
 using UnityEngine;
-using Unity.Collections;
+using FishNet.Object;
 
 public class PlayerView : NetworkBehaviour
 {
-    [SerializeField] private PlayerNetwork _playerNetwork;
+    private PlayerNetwork _playerNetwork;
+
     [SerializeField] private TMP_Text _nicknameText;
     [SerializeField] private TMP_Text _hpText;
 
-    public override void OnStartNetwork()
+    private string _lastNick;
+    private int _lastHp;
+
+    private void Awake()
     {
-        OnNicknameChanged(_playerNetwork.Nickname.Value);
-        OnHpChanged(0, _playerNetwork.HP.Value);
+        _playerNetwork = GetComponent<PlayerNetwork>();
     }
 
-    public void OnNicknameChanged(string newValue)
+    public override void OnStartClient()
     {
-        _nicknameText.text = newValue;
+        base.OnStartClient();
+        RefreshUI();
     }
 
-    private void OnHpChanged(int oldValue, int newValue)
+    private void Update()
     {
-        _hpText.text = $"HP: {newValue}";
+        RefreshUI();
+    }
+
+    private void RefreshUI()
+    {
+        if (_playerNetwork == null)
+            return;
+
+        if (_playerNetwork.Nickname.Value != _lastNick)
+        {
+            _lastNick = _playerNetwork.Nickname.Value;
+            _nicknameText.text = _lastNick;
+        }
+
+        if (_playerNetwork.HP.Value != _lastHp)
+        {
+            _lastHp = _playerNetwork.HP.Value;
+            _hpText.text = $"HP: {_lastHp}";
+        }
     }
 }

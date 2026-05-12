@@ -1,35 +1,47 @@
-using FishNet.Object;
-using FishNet.Object.Synchronizing;
 using UnityEngine;
+using FishNet.Object;
 
 public class Projectile : NetworkBehaviour
 {
-    [SerializeField] private float _speed = 15f;
-    [SerializeField] private int _damage = 25;
-    private bool _hasHit = false;
+    [SerializeField] private float speed = 18f;
+    [SerializeField] private int damage = 20;
+    [SerializeField] private float lifetime = 5f;
+
+    private float _spawnTime;
+
+    public override void OnStartNetwork()
+    {
+        base.OnStartNetwork();
+        _spawnTime = Time.time;
+    }
+
     private void Update()
     {
-        transform.Translate(Vector3.forward * _speed * Time.deltaTime);
+        transform.Translate(Vector3.forward * speed * Time.deltaTime);
+
+        if (IsServerInitialized && Time.time > _spawnTime + lifetime)
+        {
+            Despawn(gameObject);
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!IsServer || _hasHit) return; 
+        if (!IsServerInitialized)
+            return;
 
-        var target = other.GetComponent<PlayerNetwork>();
+        if (!IsSpawned)
+            return;
 
-        if (target != null)
-        {
-            if (target.Owner == Owner) return;
+        PlayerNetwork target = other.GetComponent<PlayerNetwork>();
+        if (target == null)
+            return;
 
-            _hasHit = true; 
+        if (target.Owner.ClientId == Owner.ClientId)
+            return;
 
-            target.HP.Value = Mathf.Max(0, target.HP.Value - _damage);
+        target.TakeDamage(damage);
 
-            if (NetworkObject.IsSpawned)
-            {
-                ServerManager.Despawn(gameObject);
-            }
-        }
+        Despawn(gameObject);
     }
 }

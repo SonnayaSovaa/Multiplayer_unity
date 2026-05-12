@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 2174072856561384473}
   - component: {fileID: 4184027934692673570}
   - component: {fileID: 6457553294915613084}
-  - component: {fileID: 3030734936117391910}
   m_Layer: 0
   m_Name: Sphere (1)
   m_TagString: Untagged
@@ -91,27 +90,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &3030734936117391910
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2239928949169412205}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3309449701305645382
 GameObject:
   m_ObjectHideFlags: 0
@@ -298,7 +276,6 @@ GameObject:
   - component: {fileID: 1620629302113225715}
   - component: {fileID: 2463112370793997007}
   - component: {fileID: 6053749756171888628}
-  - component: {fileID: 7538981993731736168}
   m_Layer: 0
   m_Name: Sphere (1)
   m_TagString: Untagged
@@ -378,27 +355,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &7538981993731736168
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4849541840329911625}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6149161367882476790
 GameObject:
   m_ObjectHideFlags: 0
@@ -410,7 +366,6 @@ GameObject:
   - component: {fileID: 2411779402650303443}
   - component: {fileID: 5696095044359539272}
   - component: {fileID: 2204148696330356781}
-  - component: {fileID: 543831040519840320}
   m_Layer: 0
   m_Name: Sphere (1)
   m_TagString: Untagged
@@ -491,27 +446,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &543831040519840320
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6149161367882476790}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6197445831702716223
 GameObject:
   m_ObjectHideFlags: 0
@@ -614,7 +548,6 @@ GameObject:
   - component: {fileID: 4770018405575133132}
   - component: {fileID: 22581114464296041}
   - component: {fileID: 4337470484242134465}
-  - component: {fileID: 3271014351856590441}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: Untagged
@@ -695,27 +628,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &3271014351856590441
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6478631092612260109}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6681723460398587852
 GameObject:
   m_ObjectHideFlags: 0
@@ -1117,7 +1029,6 @@ MonoBehaviour:
   _componentIndexCache: 0
   _addedNetworkObject: {fileID: 4987506050511816528}
   _networkObjectCache: {fileID: 4987506050511816528}
-  _playerNetwork: {fileID: 3704549336983541623}
   _nicknameText: {fileID: 6529273424862780917}
   _hpText: {fileID: 9217087764551572922}
 --- !u!114 &7999574569076894802
@@ -1213,11 +1124,9 @@ MonoBehaviour:
   _componentIndexCache: 4
   _addedNetworkObject: {fileID: 4987506050511816528}
   _networkObjectCache: {fileID: 4987506050511816528}
-  cc: {fileID: 4832246127854342991}
-  collider: {fileID: 1255131155876576830}
-  body: {fileID: 3516351731220780617}
-  spawnDelay: 3
-  playerView: {fileID: 8086840516316019478}
+  characterController: {fileID: 4832246127854342991}
+  characterModel: {fileID: 3516351731220780617}
+  respawnDelay: 5
 --- !u!136 &1255131155876576830
 CapsuleCollider:
   m_ObjectHideFlags: 0

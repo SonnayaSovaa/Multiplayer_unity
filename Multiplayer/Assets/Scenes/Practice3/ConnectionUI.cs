@@ -1,55 +1,82 @@
-using FishNet.Component.Spawning;
-using FishNet.Connection;
-using FishNet.Managing;
 using TMPro;
-using FishNet.Object;
-using FishNet.Object.Synchronizing;
 using UnityEngine;
+using FishNet;
+using FishNet.Transporting;
 
 public class ConnectionUI : MonoBehaviour
 {
     [SerializeField] private TMP_InputField _nicknameInput;
-    [SerializeField] private GameObject menuCanvas;
-    [SerializeField] NetworkManager networkManager;
-    [SerializeField] private NetworkObject playerPrefab;
+    [SerializeField] private GameObject _menuPanel;
 
-    // Сохраняем ник локально до появления сетевого объекта игрока.
-    public string PlayerNickname { get; private set; } = "Player";
+    public static string PlayerNickname { get; private set; } = "Player";
+
+    private void Start()
+    {
+        if (InstanceFinder.NetworkManager != null)
+        {
+            InstanceFinder.ClientManager.OnClientConnectionState += OnClientConnectionState;
+        }
+
+        ShowMenu();
+    }
+
+    private void OnDestroy()
+    {
+        if (InstanceFinder.NetworkManager != null)
+        {
+            InstanceFinder.ClientManager.OnClientConnectionState -= OnClientConnectionState;
+        }
+    }
 
     public void StartAsHost()
     {
         SaveNickname();
-        LoadGame();
-        // Хост одновременно является сервером и клиентом.
-        networkManager.ServerManager.StartConnection();
-        networkManager.ClientManager.StartConnection();
 
-        
+        InstanceFinder.ServerManager.StartConnection();
+        InstanceFinder.ClientManager.StartConnection();
     }
 
     public void StartAsClient()
     {
-
         SaveNickname();
-        LoadGame();
-
-        // Клиент только подключается к уже запущенному хосту/серверу.
-        networkManager.ClientManager.StartConnection();
-
-
+        InstanceFinder.ClientManager.StartConnection();
     }
 
     private void SaveNickname()
     {
-        // Нормализуем ввод, чтобы сервер не получил пустую строку.
         string rawValue = _nicknameInput != null ? _nicknameInput.text : string.Empty;
         PlayerNickname = string.IsNullOrWhiteSpace(rawValue) ? "Player" : rawValue.Trim();
-        
     }
 
-    private void LoadGame()
+    private void OnClientConnectionState(ClientConnectionStateArgs args)
     {
-        menuCanvas.SetActive(false);
+        switch (args.ConnectionState)
+        {
+            case LocalConnectionState.Started:
+                HideMenu();
+                Debug.Log($"[ConnectionUI] Connected as {PlayerNickname}, hiding menu");
+                break;
+
+            case LocalConnectionState.Stopped:
+                ShowMenu();
+                Debug.Log("[ConnectionUI] Disconnected, showing menu");
+                break;
+        }
     }
-    
+
+    private void HideMenu()
+    {
+        if (_menuPanel != null)
+            _menuPanel.SetActive(false);
+        else
+            gameObject.SetActive(false);
+    }
+
+    private void ShowMenu()
+    {
+        if (_menuPanel != null)
+            _menuPanel.SetActive(true);
+        else
+            gameObject.SetActive(true);
+    }
 }

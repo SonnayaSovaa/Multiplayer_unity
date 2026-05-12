@@ -149,9 +149,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ConnectionUI
   _nicknameInput: {fileID: 258899845}
-  menuCanvas: {fileID: 450785555}
-  networkManager: {fileID: 271421186}
-  playerPrefab: {fileID: 4987506050511816528, guid: 0bc4180779398f644b48f74dbda6b082, type: 3}
+  _menuPanel: {fileID: 450785555}
 --- !u!4 &55606329
 Transform:
   m_ObjectHideFlags: 0
@@ -878,6 +876,7 @@ GameObject:
   - component: {fileID: 271421185}
   - component: {fileID: 271421184}
   - component: {fileID: 271421183}
+  - component: {fileID: 271421188}
   m_Layer: 0
   m_Name: NMng
   m_TagString: Untagged
@@ -904,7 +903,7 @@ MonoBehaviour:
   _enableIpv6: 1
   _ipv6BindAddress: 
   _port: 7770
-  _maximumClients: 4095
+  _maximumClients: 4
   _clientAddress: localhost
 --- !u!114 &271421184
 MonoBehaviour:
@@ -935,7 +934,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: FishNet.Runtime::FishNet.Managing.Observing.ObserverManager
   _updateHostVisibility: 1
   _maximumTimedObserversDuration: 10
-  _defaultConditions: []
+  _defaultConditions:
+  - {fileID: 11400000, guid: 2033f54fd2794464bae08fa5a55c8996, type: 2}
   _useLevelOfDetail: 0
   _maximumLevelOfDetailInterval: 2
   _levelOfDetailUpdateDuration: 1
@@ -974,6 +974,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &271421188
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 271421182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34e4a322dca349547989b14021da4e23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FishNet.Runtime::FishNet.Managing.Transporting.TransportManager
+  Transport: {fileID: 271421183}
+  _maximumClientPacketSize: 20480
+  _intermediateLayer: {fileID: 0}
+  _latencySimulator:
+    _enabled: 0
+    _simulateHost: 1
+    _latency: 0
+    _outOfOrder: 0
+    _packetLoss: 0
 --- !u!1 &369653865
 GameObject:
   m_ObjectHideFlags: 0
