@@ -15,8 +15,14 @@ public class PlayerCamera : NetworkBehaviour
 
     private void LateUpdate()
     {
-        if (_cam == null) return;
-        _cam.transform.position = transform.position + _offset;
-        _cam.transform.LookAt(transform.position);
+
+        if (IsOwner)
+        {
+            
+            if (_cam == null) return;
+            _cam.transform.position = transform.position + _offset;
+            _cam.transform.LookAt(transform.position);
+        }
+
     }
 }

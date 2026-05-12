@@ -43,7 +43,7 @@ public class PlayerShooting : NetworkBehaviour
 
         GameObject go = Instantiate(_projectilePrefab, pos, Quaternion.LookRotation(dir));
         var no = go.GetComponent<NetworkObject>();
-        ServerManager.Spawn(go);
+        ServerManager.Spawn(go, Owner);
         
     }
 }

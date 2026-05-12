@@ -7,9 +7,9 @@ using System.Collections;
 public class PlayerNetwork : NetworkBehaviour
 {
 
-    public readonly SyncVar<int> HP = new SyncVar<int>();
+    public readonly SyncVar<int> HP = new SyncVar<int>(100);
     public readonly SyncVar<string> Nickname = new SyncVar<string>();
-    public readonly SyncVar<bool> IsAlive = new SyncVar<bool>();
+    public readonly SyncVar<bool> IsAlive = new SyncVar<bool>(true);
     
     
     [SerializeField] private CharacterController cc;
@@ -25,6 +25,8 @@ public class PlayerNetwork : NetworkBehaviour
         HP.OnChange += OnHpChanged;
         Nickname.OnChange += OnNicknameChanged;
         IsAlive.OnChange += OnIsAliveChanged;
+
+        Nickname.Value = FindObjectOfType<ConnectionUI>().PlayerNickname;
 
         points = FindObjectsByType<PlayerSpawnPoint>(FindObjectsSortMode.None);
 

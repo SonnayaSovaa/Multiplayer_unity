@@ -12,11 +12,8 @@ public class PlayerView : NetworkBehaviour
 
     public override void OnStartNetwork()
     {
-        // Подписываемся на изменения только после сетевого спавна объекта.
-
-        // Сразу рисуем текущее состояние, чтобы UI не ждал первого сетевого события.
-        //OnNicknameChanged(_playerNetwork.Nickname.Value);
-        //OnHpChanged(0, _playerNetwork.HP.Value);
+        OnNicknameChanged(_playerNetwork.Nickname.Value);
+        OnHpChanged(0, _playerNetwork.HP.Value);
     }
 
     public void OnNicknameChanged(string newValue)

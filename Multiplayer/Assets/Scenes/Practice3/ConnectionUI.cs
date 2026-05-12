@@ -14,7 +14,7 @@ public class ConnectionUI : MonoBehaviour
     [SerializeField] private NetworkObject playerPrefab;
 
     // Сохраняем ник локально до появления сетевого объекта игрока.
-    public static string PlayerNickname { get; private set; } = "Player";
+    public string PlayerNickname { get; private set; } = "Player";
 
     public void StartAsHost()
     {
