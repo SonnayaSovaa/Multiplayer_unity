@@ -67,14 +67,17 @@ public class PickupManager : MonoBehaviour
         yield return new WaitForSeconds(_respawnDelay);
 
         if (InstanceFinder.IsServer)
+        {
+            Debug.Log("[PickupManager] Spawning pickup");
+
             SpawnPickup(position);
+        }
     }
 
     private void SpawnPickup(Vector3 position)
     {
         if (!InstanceFinder.IsServer)
         {
-            Debug.LogError("[PickupManager] Cannot spawn - not server");
             return;
         }
 
@@ -91,7 +94,6 @@ public class PickupManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("[PickupManager] Missing components");
             Destroy(go);
         }
     }

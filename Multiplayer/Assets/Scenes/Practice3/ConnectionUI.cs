@@ -66,17 +66,11 @@ public class ConnectionUI : MonoBehaviour
 
     private void HideMenu()
     {
-        if (_menuPanel != null)
-            _menuPanel.SetActive(false);
-        else
-            gameObject.SetActive(false);
+        _menuPanel.SetActive(false);
     }
 
     private void ShowMenu()
     {
-        if (_menuPanel != null)
-            _menuPanel.SetActive(true);
-        else
-            gameObject.SetActive(true);
+        _menuPanel.SetActive(true);
     }
 }

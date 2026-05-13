@@ -18,6 +18,7 @@ public class PlayerNetwork : NetworkBehaviour
     // Сетевые переменные
     public readonly SyncVar<bool> IsAlive = new SyncVar<bool>(true);
     public readonly SyncVar<int> HP = new SyncVar<int>(100);
+    public readonly SyncVar<int> Score = new SyncVar<int>(0);
     public readonly SyncVar<string> Nickname = new SyncVar<string>("Player");
 
     private bool _isRespawning;
@@ -28,6 +29,7 @@ public class PlayerNetwork : NetworkBehaviour
         if (characterController == null)
             characterController = GetComponent<CharacterController>();
         _movement = GetComponent<PlayerMovement>();
+        Debug.Log("Player initialised");
     }
         public override void OnStartClient()
     {
