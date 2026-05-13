@@ -967,7 +967,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 506cd4f3f8e9dd942956ed1719917269, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCombat
-  _componentIndexCache: 6
+  _componentIndexCache: 7
   _addedNetworkObject: {fileID: 4987506050511816528}
   _networkObjectCache: {fileID: 4987506050511816528}
   player: {fileID: 3704549336983541623}
@@ -981,16 +981,16 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4259280061019729796}
-  - component: {fileID: 8086840516316019478}
-  - component: {fileID: 7999574569076894802}
-  - component: {fileID: 1906416651554802719}
-  - component: {fileID: 4832246127854342991}
-  - component: {fileID: 275860202688547253}
   - component: {fileID: 3704549336983541623}
+  - component: {fileID: 8086840516316019478}
+  - component: {fileID: 4832246127854342991}
   - component: {fileID: 1255131155876576830}
+  - component: {fileID: 6699983176241203903}
+  - component: {fileID: 1906416651554802719}
+  - component: {fileID: 7999574569076894802}
   - component: {fileID: 4987506050511816528}
   - component: {fileID: 8780449343787784631}
-  - component: {fileID: -8208580260746734360}
+  - component: {fileID: 4820106364709417434}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1014,6 +1014,24 @@ Transform:
   - {fileID: 2212041348902189293}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3704549336983541623
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7713961259339762576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c36a3e2893a6da648afe7cfd2e67602f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerNetwork
+  _componentIndexCache: 0
+  _addedNetworkObject: {fileID: 4987506050511816528}
+  _networkObjectCache: {fileID: 4987506050511816528}
+  characterController: {fileID: 4832246127854342991}
+  characterModel: {fileID: 3516351731220780617}
+  respawnDelay: 5
 --- !u!114 &8086840516316019478
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1026,46 +1044,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42f39c0606f2ac84fb713948385442a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerView
-  _componentIndexCache: 0
+  _componentIndexCache: 1
   _addedNetworkObject: {fileID: 4987506050511816528}
   _networkObjectCache: {fileID: 4987506050511816528}
   _nicknameText: {fileID: 6529273424862780917}
   _hpText: {fileID: 9217087764551572922}
---- !u!114 &7999574569076894802
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7713961259339762576}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 69ee362f80e0cc8478fbb982e9ebe6d1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerShooting
-  _componentIndexCache: 1
-  _addedNetworkObject: {fileID: 4987506050511816528}
-  _networkObjectCache: {fileID: 4987506050511816528}
-  _maxAmmo: 30
-  _projectilePrefab: {fileID: 2459658181292589610, guid: c9399d33c10e200468c3cf33906f6e46, type: 3}
-  _firePoint: {fileID: 7830523408018221169}
-  _cooldown: 0.5
---- !u!114 &1906416651554802719
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7713961259339762576}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8858aae69785d6e48af9c4d1b23a636d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerCamera
-  _componentIndexCache: 2
-  _addedNetworkObject: {fileID: 4987506050511816528}
-  _networkObjectCache: {fileID: 4987506050511816528}
-  _offset: {x: 0, y: 8, z: -6}
 --- !u!143 &4832246127854342991
 CharacterController:
   m_ObjectHideFlags: 0
@@ -1091,42 +1074,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &275860202688547253
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7713961259339762576}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96e60323faa024b4780612949781414b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
-  _componentIndexCache: 3
-  _addedNetworkObject: {fileID: 4987506050511816528}
-  _networkObjectCache: {fileID: 4987506050511816528}
-  speed: 5
-  rotSpeed: 5
-  gravity: -9.81
---- !u!114 &3704549336983541623
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7713961259339762576}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c36a3e2893a6da648afe7cfd2e67602f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerNetwork
-  _componentIndexCache: 4
-  _addedNetworkObject: {fileID: 4987506050511816528}
-  _networkObjectCache: {fileID: 4987506050511816528}
-  characterController: {fileID: 4832246127854342991}
-  characterModel: {fileID: 3516351731220780617}
-  respawnDelay: 5
 --- !u!136 &1255131155876576830
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1150,6 +1097,58 @@ CapsuleCollider:
   m_Height: 2.1189537
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &6699983176241203903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7713961259339762576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96e60323faa024b4780612949781414b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
+  _componentIndexCache: 2
+  _addedNetworkObject: {fileID: 4987506050511816528}
+  _networkObjectCache: {fileID: 4987506050511816528}
+  moveSpeed: 5
+  gravity: -9.81
+--- !u!114 &1906416651554802719
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7713961259339762576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8858aae69785d6e48af9c4d1b23a636d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerCamera
+  _componentIndexCache: 3
+  _addedNetworkObject: {fileID: 4987506050511816528}
+  _networkObjectCache: {fileID: 4987506050511816528}
+  _offset: {x: 0, y: 8, z: -6}
+--- !u!114 &7999574569076894802
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7713961259339762576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69ee362f80e0cc8478fbb982e9ebe6d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerShooting
+  _componentIndexCache: 4
+  _addedNetworkObject: {fileID: 4987506050511816528}
+  _networkObjectCache: {fileID: 4987506050511816528}
+  _maxAmmo: 30
+  _projectilePrefab: {fileID: 2459658181292589610, guid: c9399d33c10e200468c3cf33906f6e46, type: 3}
+  _firePoint: {fileID: 7830523408018221169}
+  _cooldown: 0.5
 --- !u!114 &4987506050511816528
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1169,12 +1168,13 @@ MonoBehaviour:
   <PredictedSpawn>k__BackingField: {fileID: 0}
   <PredictedOwner>k__BackingField: {fileID: 0}
   NetworkBehaviours:
-  - {fileID: 8086840516316019478}
-  - {fileID: 7999574569076894802}
-  - {fileID: 1906416651554802719}
-  - {fileID: 275860202688547253}
   - {fileID: 3704549336983541623}
+  - {fileID: 8086840516316019478}
+  - {fileID: 6699983176241203903}
+  - {fileID: 1906416651554802719}
+  - {fileID: 7999574569076894802}
   - {fileID: 8780449343787784631}
+  - {fileID: 4820106364709417434}
   - {fileID: 2524526123103274965}
   InitializedParentNetworkBehaviour: {fileID: 0}
   InitializedNestedNetworkObjects: []
@@ -1186,12 +1186,12 @@ MonoBehaviour:
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
   _defaultDespawnType: 0
-  _initializedTimestamp: -8584242033737448921
+  _initializedTimestamp: -8584229301511564065
   _localLevelOfDetailCalculationType: 0
   _useLevelOfDetail: 0
   _useRootLevelOfDetail: 1
   NetworkObserver: {fileID: 0}
-  _enablePrediction: 1
+  _enablePrediction: 0
   _predictionType: 0
   _localReconcileCorrectionType: 2
   _graphicalObject: {fileID: 0}
@@ -1229,7 +1229,7 @@ MonoBehaviour:
   _componentIndexCache: 5
   _addedNetworkObject: {fileID: 4987506050511816528}
   _networkObjectCache: {fileID: 4987506050511816528}
-  _componentConfiguration: 0
+  _componentConfiguration: 1
   _synchronizeParent: 0
   _packing:
     Position: 1
@@ -1238,8 +1238,8 @@ MonoBehaviour:
   _useScaledTime: 1
   _interpolation: 2
   _extrapolation: 2
-  _enableTeleport: 0
-  _teleportThreshold: 1
+  _enableTeleport: 1
+  _teleportThreshold: 2
   _clientAuthoritative: 1
   _sendToOwner: 1
   _interval: 1
@@ -1254,13 +1254,13 @@ MonoBehaviour:
     X: 0
     Y: 0
     Z: 0
-  _synchronizeScale: 1
+  _synchronizeScale: 0
   _scaleSensitivity: 0.001
   _scaleSnapping:
     X: 0
     Y: 0
     Z: 0
---- !u!114 &-8208580260746734360
+--- !u!114 &4820106364709417434
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1269,13 +1269,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 7713961259339762576}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c71fd7f855ec523429999fc4e14a1928, type: 3}
+  m_Script: {fileID: 11500000, guid: 4860c14fa71362b49a398a2dc941577e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: FishNet.Runtime::FishNet.Observing.NetworkObserver
-  _overrideType: 2
-  _updateHostVisibility: 1
-  _observerConditions:
-  - {fileID: 11400000, guid: 2033f54fd2794464bae08fa5a55c8996, type: 2}
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerMovementPredicted
+  _componentIndexCache: 6
+  _addedNetworkObject: {fileID: 4987506050511816528}
+  _networkObjectCache: {fileID: 4987506050511816528}
+  moveSpeed: 5
+  gravity: -9.81
+  jumpHeight: 1.5
 --- !u!1 &9077455911193302314
 GameObject:
   m_ObjectHideFlags: 0

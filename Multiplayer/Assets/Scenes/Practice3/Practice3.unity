@@ -1116,8 +1116,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 381667055}
-  - component: {fileID: 381667056}
   - component: {fileID: 381667057}
+  - component: {fileID: 381667058}
   m_Layer: 0
   m_Name: HealSpawnres
   m_TagString: Untagged
@@ -1146,30 +1146,6 @@ Transform:
   - {fileID: 738663555}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &381667056
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 381667054}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21f6850ba34f6d04699bfc29ca07ff1c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PickupManager
-  _componentIndexCache: 255
-  _addedNetworkObject: {fileID: 381667057}
-  _networkObjectCache: {fileID: 0}
-  _healthPickupPrefab: {fileID: 2088237328851040689, guid: 7c199ca21d6fa5f4c9d00b2d9bd4af14, type: 3}
-  _spawnPoints:
-  - {fileID: 556877043}
-  - {fileID: 726316122}
-  - {fileID: 1474128020}
-  - {fileID: 399750215}
-  - {fileID: 738663555}
-  - {fileID: 1060981809}
-  _respawnDelay: 10
 --- !u!114 &381667057
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1227,6 +1203,27 @@ MonoBehaviour:
     Rotation: {x: 0, y: 0, z: 0, w: 0}
     Scale: {x: 0, y: 0, z: 0}
     IsValid: 0
+--- !u!114 &381667058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 381667054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21f6850ba34f6d04699bfc29ca07ff1c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PickupManager
+  _healthPickupPrefab: {fileID: 2088237328851040689, guid: 7c199ca21d6fa5f4c9d00b2d9bd4af14, type: 3}
+  _spawnPoints:
+  - {fileID: 556877043}
+  - {fileID: 726316122}
+  - {fileID: 1060981809}
+  - {fileID: 1474128020}
+  - {fileID: 399750215}
+  - {fileID: 738663555}
+  _respawnDelay: 10
 --- !u!1 &399750214
 GameObject:
   m_ObjectHideFlags: 0

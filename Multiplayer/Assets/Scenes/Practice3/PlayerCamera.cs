@@ -1,6 +1,5 @@
-using FishNet.Object;
-using FishNet.Object.Synchronizing;
 using UnityEngine;
+using FishNet.Object;
 
 public class PlayerCamera : NetworkBehaviour
 {
@@ -8,21 +7,25 @@ public class PlayerCamera : NetworkBehaviour
 
     private Camera _cam;
 
-    public override void OnStartNetwork()
+    public override void OnStartClient()
     {
+        base.OnStartClient();
+
+        if (!IsOwner)
+        {
+            enabled = false;
+            return;
+        }
+
         _cam = Camera.main;
     }
 
     private void LateUpdate()
     {
+        if (!enabled || _cam == null)
+            return;
 
-        if (IsOwner)
-        {
-            
-            if (_cam == null) return;
-            _cam.transform.position = transform.position + _offset;
-            _cam.transform.LookAt(transform.position);
-        }
-
+        _cam.transform.position = transform.position + _offset;
+        _cam.transform.LookAt(transform.position);
     }
 }
