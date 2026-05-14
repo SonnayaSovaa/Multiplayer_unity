@@ -1215,6 +1215,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21f6850ba34f6d04699bfc29ca07ff1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PickupManager
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 381667057}
+  _networkObjectCache: {fileID: 0}
   _healthPickupPrefab: {fileID: 2088237328851040689, guid: 7c199ca21d6fa5f4c9d00b2d9bd4af14, type: 3}
   _spawnPoints:
   - {fileID: 556877043}
