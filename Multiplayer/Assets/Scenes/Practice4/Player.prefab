@@ -1112,7 +1112,8 @@ MonoBehaviour:
   _componentIndexCache: 2
   _addedNetworkObject: {fileID: 4987506050511816528}
   _networkObjectCache: {fileID: 4987506050511816528}
-  moveSpeed: 5
+  speed: 5
+  rotSpeed: 5
   gravity: -9.81
 --- !u!114 &1906416651554802719
 MonoBehaviour:
@@ -1145,7 +1146,6 @@ MonoBehaviour:
   _componentIndexCache: 4
   _addedNetworkObject: {fileID: 4987506050511816528}
   _networkObjectCache: {fileID: 4987506050511816528}
-  _maxAmmo: 30
   _projectilePrefab: {fileID: 2459658181292589610, guid: c9399d33c10e200468c3cf33906f6e46, type: 3}
   _firePoint: {fileID: 7830523408018221169}
   _cooldown: 0.5
@@ -1207,7 +1207,7 @@ MonoBehaviour:
   _teleportThreshold: 1
   <PrefabId>k__BackingField: 3
   <SpawnableCollectionId>k__BackingField: 0
-  <AssetPathHash>k__BackingField: 5248081285122930819
+  <AssetPathHash>k__BackingField: 11054340876888600532
   SceneId: 0
   SerializedTransformProperties:
     Position: {x: 0, y: 0.421, z: 0}
@@ -1275,9 +1275,9 @@ MonoBehaviour:
   _componentIndexCache: 6
   _addedNetworkObject: {fileID: 4987506050511816528}
   _networkObjectCache: {fileID: 4987506050511816528}
-  moveSpeed: 5
+  speed: 5
+  rotSpeed: 5
   gravity: -9.81
-  jumpHeight: 1.5
 --- !u!1 &9077455911193302314
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,8 +6,8 @@ using UnityEngine.InputSystem;
 public class PlayerShooting : NetworkBehaviour
 {
     public readonly SyncVar<int> Ammo = new SyncVar<int>();
+    public readonly SyncVar<int> _maxAmmo = new SyncVar<int>(30);
     
-    [SerializeField] private int _maxAmmo = 30;
     [SerializeField] private GameObject _projectilePrefab;
     [SerializeField] private Transform _firePoint;
     [SerializeField] private float _cooldown = 0.5f;
@@ -18,7 +18,7 @@ public class PlayerShooting : NetworkBehaviour
     public override void OnStartNetwork()
     {
         _playerNetwork = GetComponent<PlayerNetwork>();
-        if (IsServerInitialized) Ammo.Value = _maxAmmo; 
+        if (IsServerInitialized) Ammo.Value = _maxAmmo.Value; 
     }
 
     private void Update()

@@ -3,29 +3,25 @@ using FishNet.Object;
 
 public class PlayerCamera : NetworkBehaviour
 {
-    [SerializeField] private Vector3 _offset = new(0f, 8f, -6f);
+    [SerializeField] private Vector3 offset = new(0f, 8f, -6f);
 
     private Camera _cam;
 
-    public override void OnStartClient()
+    public override void OnStartNetwork()
     {
-        base.OnStartClient();
-
-        if (!IsOwner)
+        base.OnStartNetwork();
+        if (!Owner.IsLocalClient)
         {
             enabled = false;
             return;
         }
-
         _cam = Camera.main;
     }
 
     private void LateUpdate()
     {
-        if (!enabled || _cam == null)
-            return;
-
-        _cam.transform.position = transform.position + _offset;
+        if (!_cam) return;
+        _cam.transform.position = transform.position + offset;
         _cam.transform.LookAt(transform.position);
     }
 }

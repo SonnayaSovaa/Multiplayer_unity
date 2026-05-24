@@ -1,11 +1,10 @@
-using FishNet;
 using UnityEngine;
+using FishNet;
 
 public class ServerAutoStart : MonoBehaviour
 {
     private void Start()
     {
-        // Application.isBatchMode == true, когда Unity запущен без графики.
         if (Application.isBatchMode)
         {
             Debug.Log("[Server] Headless mode detected. Starting server...");

@@ -86,6 +86,16 @@ public class PlayerNetwork : NetworkBehaviour
         StartCoroutine(RespawnCoroutine());
     }
 
+    [Server]
+    public void Respawn()
+    {
+        if (_isRespawning)
+            return;
+        _isRespawning = true;
+        
+        StartCoroutine(RespawnCoroutine());
+    }
+
     [ObserversRpc]
     private void RpcHandleDeath()
     {

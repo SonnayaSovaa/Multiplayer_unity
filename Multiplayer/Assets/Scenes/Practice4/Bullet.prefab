@@ -157,9 +157,9 @@ MonoBehaviour:
   _componentIndexCache: 0
   _addedNetworkObject: {fileID: 3620521492471397540}
   _networkObjectCache: {fileID: 3620521492471397540}
-  _speed: 40
-  _damage: 15
-  _lifetime: 5
+  speed: 18
+  damage: 20
+  lifetime: 5
 --- !u!114 &3620521492471397540
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -211,7 +211,7 @@ MonoBehaviour:
   _teleportThreshold: 1
   <PrefabId>k__BackingField: 9
   <SpawnableCollectionId>k__BackingField: 0
-  <AssetPathHash>k__BackingField: 11335409614533379895
+  <AssetPathHash>k__BackingField: 9312881858008297200
   SceneId: 0
   SerializedTransformProperties:
     Position: {x: -2.56741, y: -0.44087, z: 3.20293}
