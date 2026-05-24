@@ -42,7 +42,7 @@ public class PlayerView : NetworkBehaviour
         if (_playerNetwork.HP.Value != _lastHp)
         {
             _lastHp = _playerNetwork.HP.Value;
-            _hpText.text = $"HP: {_lastHp}";
+            _hpText.text = ""+_lastHp;
         }
     }
 }

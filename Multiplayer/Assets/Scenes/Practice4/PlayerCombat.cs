@@ -10,6 +10,7 @@ public class PlayerCombat : NetworkBehaviour
     [SerializeField] private int damage = 10;
     private PlayerNetwork _target;
     
+    
     private void OnTriggerEnter(Collider other)
     {
         if (!IsServerInitialized)
@@ -18,22 +19,21 @@ public class PlayerCombat : NetworkBehaviour
         if (!IsSpawned)
             return;
 
-        _target = other.GetComponent<PlayerNetwork>();
-        Debug.Log(_target.name);
-        
+        PlayerNetwork target = other.GetComponent<PlayerNetwork>();
+        if (target == null)
+            return;
 
-        if (_target ==null)
+        if (target.Owner.ClientId == Owner.ClientId)
             return;
-        // Не стреляем в самого себя
-        if (_target.Owner.ClientId == Owner.ClientId)
-            return;
-        
-        _target.TakeDamage(damage);
+
+        target.TakeDamage(damage);
+        player.Score.Value +=damage;
     }
 
     private void OnTriggerExit(Collider other)
     {
         _target = null;
+        int a = 0;
     }
 
     

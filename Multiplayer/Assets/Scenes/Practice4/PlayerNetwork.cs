@@ -1,19 +1,22 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using FishNet.Component.Transforming;
+using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerNetwork : NetworkBehaviour
 {
-    [Header("Player Components")]
-    [SerializeField] private CharacterController characterController;
+    [Header("Player Components")] [SerializeField]
+    private CharacterController characterController;
+
     [SerializeField] private GameObject characterModel;
 
-    [Header("Respawn Settings")]
-    [SerializeField] private float respawnDelay = 5f;
+    [Header("Respawn Settings")] [SerializeField]
+    private float respawnDelay = 5f;
 
     // Сетевые переменные
     public readonly SyncVar<bool> IsAlive = new SyncVar<bool>(true);
@@ -31,14 +34,15 @@ public class PlayerNetwork : NetworkBehaviour
         _movement = GetComponent<PlayerMovement>();
         Debug.Log("Player initialised");
     }
-        public override void OnStartClient()
+
+    public override void OnStartClient()
     {
         base.OnStartClient();
 
         if (IsOwner)
             SubmitNicknameServerRpc(ConnectionUI.PlayerNickname);
     }
-        
+
     [ServerRpc(RequireOwnership = false)]
     public void SubmitNicknameServerRpc(string nickname)
     {
@@ -56,7 +60,7 @@ public class PlayerNetwork : NetworkBehaviour
         IsAlive.Value = true;
         HP.Value = 100;
     }
-    
+
     [Server]
     public void TakeDamage(int damage)
     {
@@ -80,20 +84,22 @@ public class PlayerNetwork : NetworkBehaviour
 
         IsAlive.Value = false;
         _isRespawning = true;
+        Score.Value /= 2;
 
         RpcHandleDeath();
 
-        StartCoroutine(RespawnCoroutine());
+        StartCoroutine(RespawnCoroutine(respawnDelay));
     }
 
+
     [Server]
-    public void Respawn()
+    public void Respawn(float delay)
     {
         if (_isRespawning)
             return;
         _isRespawning = true;
-        
-        StartCoroutine(RespawnCoroutine());
+
+        StartCoroutine(RespawnCoroutine(0));
     }
 
     [ObserversRpc]
@@ -105,73 +111,62 @@ public class PlayerNetwork : NetworkBehaviour
     }
 
     [Server]
-    private IEnumerator RespawnCoroutine()
+    private IEnumerator RespawnCoroutine(float delay)
     {
-        float timer = respawnDelay;
 
-        while (timer > 0f)
-        {
-            RpcRespawnCountdown(Mathf.CeilToInt(timer));
-            yield return new WaitForSeconds(1f);
-            timer -= 1f;
-        }
-
+        yield return new WaitForSeconds(delay);
         RespawnPlayer();
     }
 
-    [ObserversRpc]
-    private void RpcRespawnCountdown(int secondsLeft)
+
+    [Server]
+    private void RespawnPlayer()
     {
-        Debug.Log($"Respawn через {secondsLeft}...");
+        Transform spawnPoint = GetRandomRespawnPoint();
+        if (spawnPoint == null)
+            return;
+
+        CharacterController cc = characterController;
+
+        if (cc != null)
+            cc.enabled = false;
+
+        transform.SetPositionAndRotation(
+            spawnPoint.position,
+            spawnPoint.rotation
+        );
+
+        HP.Value = 100;
+        IsAlive.Value = true;
+
+        RpcHandleRespawn(
+            spawnPoint.position,
+            spawnPoint.rotation
+        );
+
+        _isRespawning = false;
     }
 
-   [Server]
-private void RespawnPlayer()
-{
-    Transform spawnPoint = GetRandomRespawnPoint();
-    if (spawnPoint == null)
-        return;
+    [ObserversRpc]
+    private void RpcHandleRespawn(Vector3 position, Quaternion rotation)
+    {
+        if (characterController != null)
+            characterController.enabled = false;
 
-    CharacterController cc = characterController;
-
-    if (cc != null)
-        cc.enabled = false;
-
-    transform.SetPositionAndRotation(
-        spawnPoint.position,
-        spawnPoint.rotation
-    );
-
-    HP.Value = 100;
-    IsAlive.Value = true;
-
-    RpcHandleRespawn(
-        spawnPoint.position,
-        spawnPoint.rotation
-    );
-
-    _isRespawning = false;
-}
-[ObserversRpc]
-private void RpcHandleRespawn(Vector3 position, Quaternion rotation)
-{
-    if (characterController != null)
-        characterController.enabled = false;
-
-    transform.SetPositionAndRotation(position, rotation);
+        transform.SetPositionAndRotation(position, rotation);
 
 
-    if (characterModel != null)
-        characterModel.SetActive(true);
+        if (characterModel != null)
+            characterModel.SetActive(true);
 
-    if (characterController != null)
-        characterController.enabled = true;
-}
+        if (characterController != null)
+            characterController.enabled = true;
+    }
 
     [Server]
     private Transform GetRandomRespawnPoint()
     {
-        PlayerSpawnPoint [] points = FindObjectsByType<PlayerSpawnPoint>(FindObjectsSortMode.None);
+        PlayerSpawnPoint[] points = FindObjectsByType<PlayerSpawnPoint>(FindObjectsSortMode.None);
 
         if (points == null || points.Length == 0)
         {
@@ -182,7 +177,7 @@ private void RpcHandleRespawn(Vector3 position, Quaternion rotation)
         int index = Random.Range(0, points.Length);
         return points[index].transform;
     }
-    
+
     [ServerRpc]
     public void SetNickname(string newNickname)
     {

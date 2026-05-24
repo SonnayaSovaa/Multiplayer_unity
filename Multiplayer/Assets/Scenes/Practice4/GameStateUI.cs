@@ -18,26 +18,16 @@ public class GameStateUI : MonoBehaviour
 
         if (!gameManager) gameManager = FindFirstObjectByType<GameManager>();
 
-        Bind();
-        RefreshAll();
-    }
-
-    private void OnDestroy()
-    {
-        Unbind();
-    }
-
-    private void Bind()
-    {
         if (_bound || !gameManager) return;
 
         gameManager.CurrentState.OnChange += OnStateChanged;
         gameManager.ConnectedPlayers.OnChange += OnConnectedPlayersChanged;
         gameManager.MatchTimer.OnChange += OnMatchTimerChanged;
         _bound = true;
+        RefreshAll();
     }
 
-    private void Unbind()
+    private void OnDestroy()
     {
         if (!_bound || !gameManager) return;
 
@@ -90,7 +80,7 @@ public class GameStateUI : MonoBehaviour
         {
             bool show = gameManager.CurrentState.Value == GameManager.GameState.InProgress;
             matchTimerText.gameObject.SetActive(show);
-            if (show) matchTimerText.text = $"Матч: {Mathf.Max(0f, gameManager.MatchTimer.Value):F1} с";
+            if (show) matchTimerText.text = $"Матч: {Mathf.Max(0f, gameManager.MatchTimer.Value):F0} с";
         }
     }
 
@@ -102,8 +92,8 @@ public class GameStateUI : MonoBehaviour
         list.Sort((a, b) => b.Score.Value.CompareTo(a.Score.Value));
 
         var sb = new StringBuilder();
-        sb.AppendLine("Результаты");
-        foreach (PlayerNetwork pn in list) sb.AppendLine($"{pn.Nickname.Value}: {pn.Score.Value} попаданий");
+        sb.AppendLine("---- Итог ----");
+        foreach (PlayerNetwork pn in list) sb.AppendLine($"{pn.Nickname.Value}: {pn.Score.Value} очков");
 
         resultsText.text = sb.ToString();
     }

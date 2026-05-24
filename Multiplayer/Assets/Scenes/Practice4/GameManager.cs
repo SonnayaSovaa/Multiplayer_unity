@@ -188,7 +188,7 @@ public class GameManager : NetworkBehaviour
             pn.HP.Value = 100;
             pn.IsAlive.Value = true;
             pn.Score.Value = 0;
-            pn.Respawn();
+            pn.Respawn(0);
 
             if (nob.TryGetComponent(out PlayerShooting shooting)) shooting.Ammo.Value = shooting._maxAmmo.Value;
         }

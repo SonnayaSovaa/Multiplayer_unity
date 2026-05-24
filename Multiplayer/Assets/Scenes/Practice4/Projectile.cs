@@ -1,5 +1,6 @@
 using UnityEngine;
 using FishNet.Object;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class Projectile : NetworkBehaviour
 {
@@ -8,6 +9,12 @@ public class Projectile : NetworkBehaviour
     [SerializeField] private float lifetime = 5f;
 
     private float _spawnTime;
+    private PlayerNetwork _ownerPlayer;
+
+    public void Init(PlayerNetwork owner)
+    {
+        _ownerPlayer = owner;
+    }
 
     public override void OnStartNetwork()
     {
@@ -41,6 +48,7 @@ public class Projectile : NetworkBehaviour
             return;
 
         target.TakeDamage(damage);
+        _ownerPlayer.Score.Value +=damage;
 
         Despawn(gameObject);
     }
